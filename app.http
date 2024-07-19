@@ -7,11 +7,19 @@ GET http://localhost:3001/data/6/
 ### Insert new data in the table
 
 POST http://localhost:3001/data/
-Content-Type: 'application/json'
+Content-Type: application/json
 
 {
-    "id": 9,
-    "name": "santro",
+    "name": "Andro",
     "imageUrl": "https://img.freepik.com/free-photo/close-up-portrait-young-hindu-man-isolated-black-studio-wall_155003-29352.jpg?ga=GA1.1.1041120550.1692680325&semt=ais_user",
-    "city": "Hyderabad"
+    "city": "Los Angeles"
+}
+
+### Updating name in the table
+
+POST http://localhost:3001/data/2
+Content-Type: application/json
+
+{
+    "name": "Lala"
 }

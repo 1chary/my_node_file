@@ -10,7 +10,7 @@ const dbPath = path.join(__dirname,"mydata.db")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors("*"))
+app.use(cors());
 
 let db = null;
 
@@ -58,7 +58,31 @@ app.get("/data/:id/" ,async(request,response) => {
 // insert the data in the database through api
 app.post("/data/", async(request,response) => {
     const details = request.body;
-    console.log(details)
+    const {name,imageUrl,city} = details;
+    const insertData = `
+    INSERT INTO user_details(name,image_url,city) 
+    VALUES (
+        '${name}',
+        '${imageUrl}',
+        '${city}'
+    );
+    `;
+    const dbResponse = await db.run(insertData)
+    const getId =  dbResponse.lastID
+    response.send({id: getId})
 })
   
+// update the data using id 
+app.post("/data/:id", async(request,response) => {
+    const {id} = request.params;
+    const {name} = request.body
+    const updateName = `
+    UPDATE user_details
+    SET name = '${name}'
+    WHERE id = ${id}
+    `;
+    await db.run(updateName)
+    response.send('Name Updated Successfully')
+})
+
 initializeTheServer()
