@@ -1,25 +1,22 @@
 ### Get all the data available in the database
-GET http://localhost:3001/data/
+GET http://localhost:3001/users/
 
-### Get With respect to id 
-GET http://localhost:3001/data/6/
+### insert the data into table
 
-### Insert new data in the table
-
-POST http://localhost:3001/data/
+POST http://localhost:3001/users/
 Content-Type: application/json
 
 {
-    "name": "Andro",
-    "imageUrl": "https://img.freepik.com/free-photo/close-up-portrait-young-hindu-man-isolated-black-studio-wall_155003-29352.jpg?ga=GA1.1.1041120550.1692680325&semt=ais_user",
-    "city": "Los Angeles"
+    "name": "chintu_chita",
+    "password": "chintu"
 }
 
-### Updating name in the table
+### login api 
 
-POST http://localhost:3001/data/2
+POST http://localhost:3001/login/
 Content-Type: application/json
 
 {
-    "name": "Lala"
+    "name": "chintu_chita",
+    "password": "chintu"
 }

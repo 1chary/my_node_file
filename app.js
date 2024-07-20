@@ -1,5 +1,7 @@
 const express = require("express")
 const app = express()
+const bodyParser = require('body-parser');
+const bcrypt = require("bcrypt")
 const path = require("path")
 const cors = require("cors")
 
@@ -7,9 +9,7 @@ const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 
 const dbPath = path.join(__dirname,"mydata.db")
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors());
 
 let db = null;
@@ -32,57 +32,68 @@ const initializeTheServer = async () => {
 
 //get all the data //
 
-app.get("/data/", async(request,response) => {
+app.get("/users/", async(request,response) => {
     const getQueryResults = `
     select *
-    from user_details
+    from users
     `
     const results = await db.all(getQueryResults)
     response.send(results)
 })
 
-// get with respect to id
+// insert the data in the table using request body 
 
-app.get("/data/:id/" ,async(request,response) => {
-    const { id } = request.params;
-    const wrtId = `
-    select *
-    from user_details
-    where id = ${id}
-    `
-    const details = await db.get(wrtId);
-    response.send(details)
+app.post("/users/", async (request,response) => {
+    const {name,password} = request.body;
+    const hashedPassword = await bcrypt.hash(password,10)
+    const checkUsernameAvailable = `
+    SELECT name
+    FROM users
+    WHERE name = '${name}';
+    `;
+    const queryResults = await db.get(checkUsernameAvailable)
+    if (queryResults === undefined) {
+        const insertNewUser = `
+        INSERT INTO users(name,password)
+        VALUES (
+            '${name}',
+            '${hashedPassword}'
+        );
+        `;
+        await db.run(insertNewUser)
+        response.send("user added successfully");
+    }
+    else {
+        response.status = 400;
+        response.send("user already exists");
+    }
 })
 
 
-// insert the data in the database through api
-app.post("/data/", async(request,response) => {
-    const details = request.body;
-    const {name,imageUrl,city} = details;
-    const insertData = `
-    INSERT INTO user_details(name,image_url,city) 
-    VALUES (
-        '${name}',
-        '${imageUrl}',
-        '${city}'
-    );
+// check if the user available in the database or not 
+
+app.post("/login/", async(request,response) => {
+    const {name,password} = request.body;
+    const dbUser = `
+    SELECT *
+    FROM users
+    WHERE name = '${name}';
     `;
-    const dbResponse = await db.run(insertData)
-    const getId =  dbResponse.lastID
-    response.send({id: getId})
-})
-  
-// update the data using id 
-app.post("/data/:id", async(request,response) => {
-    const {id} = request.params;
-    const {name} = request.body
-    const updateName = `
-    UPDATE user_details
-    SET name = '${name}'
-    WHERE id = ${id}
-    `;
-    await db.run(updateName)
-    response.send('Name Updated Successfully')
+    const checkAvailability = await db.get(dbUser)
+    if (checkAvailability === undefined) {
+        response.status = 400;
+        response.send("user not exists")
+    }
+    else {
+        const comparePassword = await bcrypt.compare(password,checkAvailability.password);
+        if (comparePassword === true) {
+            response.send("login success")
+        }
+        else {
+            response.status = 400;
+            response.send("Invalid Password")
+        }
+    }
 })
 
 initializeTheServer()
