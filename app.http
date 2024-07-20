@@ -3,7 +3,7 @@ GET http://localhost:3001/users/
 
 ### insert the data into table
 
-POST http://localhost:3001/users/
+POST http://localhost:3001/signUp/
 Content-Type: application/json
 
 {
@@ -17,6 +17,6 @@ POST http://localhost:3001/login/
 Content-Type: application/json
 
 {
-    "name": "chintu_chita",
-    "password": "chintu"
+    "name": "lala",
+    "password": "lala123"
 }

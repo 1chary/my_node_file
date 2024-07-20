@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const bodyParser = require('body-parser');
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const path = require("path")
 const cors = require("cors")
 
@@ -43,7 +44,7 @@ app.get("/users/", async(request,response) => {
 
 // insert the data in the table using request body 
 
-app.post("/users/", async (request,response) => {
+app.post("/signUp/", async (request,response) => {
     const {name,password} = request.body;
     const hashedPassword = await bcrypt.hash(password,10)
     const checkUsernameAvailable = `
@@ -87,7 +88,11 @@ app.post("/login/", async(request,response) => {
     else {
         const comparePassword = await bcrypt.compare(password,checkAvailability.password);
         if (comparePassword === true) {
-            response.send("login success")
+            const payLoad = {
+                username: name,
+            }
+            const jwtToken = jwt.sign(payLoad, "my_token");
+            response.send({jwtToken})
         }
         else {
             response.status = 400;
@@ -95,5 +100,7 @@ app.post("/login/", async(request,response) => {
         }
     }
 })
+
+
 
 initializeTheServer()
