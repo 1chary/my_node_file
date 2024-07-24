@@ -3,38 +3,16 @@
     padding: 0px;
     box-sizing: content-box;
 }
-.container {
-    height: 100vh;
-}
-.heading {
-    color: blue;
-    font-size: 42px;
-}
-@media all and (max-width: 767px) {
-    .heading {
-        font-size: 24px;
+
+
+@media screen and (orientation: landscape) {
+    .container {
+        background-color: yellow;
     }
-} 
-
-.buttonStyle {
-    height: 50px;
-    width: 100px;
-    border-radius: 15px;
 }
 
-.unordered {
-    list-style-type: square;
-}
-.error-message {
-    color: red;
-    font-size: 24px;
-    font-family: Lucida Handwriting;
-}
-.checking {
-    height: 50vh;
-    border: 1px solid black
-}
-.image {
-    height: 150px;
-    width: 150px;
+@media screen and (orientation: portrait) {
+    .container {
+        background-color: blue;
+    }
 }

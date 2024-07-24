@@ -73,7 +73,7 @@ app.post("/signUp/", async (request,response) => {
 
 // check if the user available in the database or not 
 
-app.post("/login/", async(request,response) => {
+app.post("/login", async(request,response) => {
     const {name,password} = request.body;
     const dbUser = `
     SELECT *
@@ -82,8 +82,8 @@ app.post("/login/", async(request,response) => {
     `;
     const checkAvailability = await db.get(dbUser)
     if (checkAvailability === undefined) {
-        response.status = 400;
-        response.send("user not exists")
+        response.status(400);
+        response.send("Invalid user")
     }
     else {
         const comparePassword = await bcrypt.compare(password,checkAvailability.password);
@@ -95,7 +95,7 @@ app.post("/login/", async(request,response) => {
             response.send({jwtToken})
         }
         else {
-            response.status = 400;
+            response.status(400);
             response.send("Invalid Password")
         }
     }
