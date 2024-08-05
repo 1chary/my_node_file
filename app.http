@@ -20,3 +20,18 @@ Content-Type: application/json
     "name": "lala",
     "password": "lala123"
 }
+
+### check 
+GET http://localhost:3001/check
+
+### sessions 
+POST http://localhost:3001/sessions
+
+### lets check with openweather api 
+
+POST http://localhost:3001/open
+Content-Type: application/json 
+
+{
+    "userInput": "Delhi"
+}

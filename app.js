@@ -101,6 +101,37 @@ app.post("/login", async(request,response) => {
     }
 })
 
+app.get("/check" , async(request,response) => {
+    let query = `
+        SELECT *
+        FROM session_management
+    `
+    const result = await db.all(query)
+    response.send(result)
+})
+
+// checking session management 
+app.post("/sessions", async(request,response) => {
+    let time = new Date()
+    let date = time.getDate().toString()
+    let month = (time.getMonth()+1).toString()
+    let year = time.getFullYear().toString()
+    let check = date + month + year
+    ;
+    const insertIntoTable = `
+    INSERT INTO session_management(in_time)
+    VALUES (${check});`;
+    await db.run(insertIntoTable)
+    response.send("Added in time")
+})
+
+
+app.post("/open", async(request,response) => {
+    const {userInput} = request.body
+    const url = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=metric&q=${userInput}&appid=2fe74895e927cbe81e92169f1a159f12`)
+    const data = await url.json()
+    response.send(data)
+})
 
 
 initializeTheServer()
