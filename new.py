@@ -27,6 +27,4 @@ height = [0,1,0,2,1,0,1,3,2,1,2,1]
 sorted_list = sorted(height)
 second_max_number = sorted_list[-2]
 index_of_second_max_number = height.index(second_max_number)
-
-
 get_the_amount_rain_water_stored(height,second_max_number,index_of_second_max_number)

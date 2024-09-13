@@ -4,15 +4,8 @@
     box-sizing: content-box;
 }
 
-
-@media screen and (orientation: landscape) {
-    .container {
-        background-color: yellow;
-    }
-}
-
-@media screen and (orientation: portrait) {
-    .container {
-        background-color: blue;
-    }
+.container {
+    height: 100vh;
+    width: 100%;
+    border: 1px solid black;
 }
