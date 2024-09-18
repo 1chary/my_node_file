@@ -1,44 +1,56 @@
-dictionary_to_store_start_values = {}
-dungeon = [[0]]
-length_of_dungeon = len(dungeon)
-
-
-def calculate_the_start_and_final_value(number,row_length, column_length,final_value):
-    delta_value = final_value - number
-    start_value = max(1,delta_value)
-    dictionary_to_store_start_values[row_length,column_length] = start_value
-
-
-for i in range(1,length_of_dungeon+1):
-    row_access_number = length_of_dungeon - i
-    access_row = dungeon[row_access_number]
-    column_length = len(access_row)
-    for j in range(1,column_length+1): 
-        reverse_the_row_numbers = column_length - j 
-        value_from_dungeon = dungeon[row_access_number][reverse_the_row_numbers]
-        if (row_access_number == length_of_dungeon-1 and column_length - j == column_length-1):
-            final_value = 1
-            calculate_the_start_and_final_value(value_from_dungeon,row_access_number,reverse_the_row_numbers,final_value)
-        elif (row_access_number == length_of_dungeon - 1):
-            value_from_dungeon = dungeon[row_access_number][reverse_the_row_numbers]
-            add_one_access_the_final_value_from_dict = reverse_the_row_numbers + 1
-            final_value = dictionary_to_store_start_values[row_access_number,add_one_access_the_final_value_from_dict]
-            calculate_the_start_and_final_value(value_from_dungeon,row_access_number,reverse_the_row_numbers,final_value)
+def check_weather_distribution_is_clockwise_or_anticlockwise(index_of_first_name,index_of_second_name):
+    difference_in_indeces = index_of_first_name - index_of_second_name
+    if (difference_in_indeces < 0):
+        return "Clockwise"
+    else:
+        return "AntiClockwise"
+    
+def check_index_value(index):
+    if index == len(no_of_people)-1:
+        index = 0
+        return index
+    else:
+        index += 1
+        return index
+        
+    
+def upload_data_in_dictionary(to_store_the_count_of_chocolates,no_of_people,no_of_chocolates,index):
+    no_of_chocolates = no_of_chocolates - len(to_store_the_count_of_chocolates)
+    for i in range(no_of_chocolates):
+        access_name = no_of_people[index]
+        if access_name in to_store_the_count_of_chocolates:
+            to_store_the_count_of_chocolates[access_name] += 1 
+            index = check_index_value(index)
         else:
-            if (reverse_the_row_numbers == column_length - 1):
-                value_from_dungeon = dungeon[row_access_number][reverse_the_row_numbers]
-                access_the_value_from_next_row_index = row_access_number + 1
-                get_the_next_row_start_value_from_storage = dictionary_to_store_start_values[access_the_value_from_next_row_index,reverse_the_row_numbers]
-                calculate_the_start_and_final_value(value_from_dungeon,row_access_number,reverse_the_row_numbers,get_the_next_row_start_value_from_storage)
-            else:
-                access_the_value_from_next_row_index = row_access_number + 1
-                access_the_value_from_next_column_index = reverse_the_row_numbers + 1
-                get_the_row_value = dictionary_to_store_start_values[access_the_value_from_next_row_index,reverse_the_row_numbers]
-                get_the_column_value = dictionary_to_store_start_values[row_access_number,access_the_value_from_next_column_index]
-                filter_by_minimum = min(get_the_column_value,get_the_row_value)
-                value_from_dungeon = dungeon[row_access_number][reverse_the_row_numbers]
-                calculate_the_start_and_final_value(value_from_dungeon,row_access_number,reverse_the_row_numbers,filter_by_minimum)
+            to_store_the_count_of_chocolates[access_name] = 1
+            index = check_index_value(index)
+    for (key,value) in to_store_the_count_of_chocolates.items():
+        output_format = "{}-{}".format(key,value)
+        print(output_format)
+    print(no_of_people[index])
+
+def distribute_the_chocolates(no_of_chocolates,no_of_people,first_name,second_name,second_name_index):
+    to_store_the_count_of_chocolates = {}
+    to_store_the_count_of_chocolates[first_name] = 1 
+    to_store_the_count_of_chocolates[second_name] = 1
+    index = 0
+    if second_name_index == len(no_of_people)-1:
+        index = 0
+        data_result = upload_data_in_dictionary(to_store_the_count_of_chocolates,no_of_people,no_of_chocolates,index)
+    else:
+        index = second_name_index
+        data_result = upload_data_in_dictionary(to_store_the_count_of_chocolates,no_of_people,no_of_chocolates,index)
+    return data_result
                 
 
-print(dictionary_to_store_start_values[0,0]) 
+no_of_people = ["jane","jack","dane","sane","danny"]
+no_of_chocolates = 5
+first_name = "jack"
+second_name = "sane"
+first_name_index = no_of_people.index(first_name)
+second_name_index = no_of_people.index(second_name)
+rotation_result = check_weather_distribution_is_clockwise_or_anticlockwise(first_name_index,second_name_index)
+print(rotation_result)
+result = distribute_the_chocolates(no_of_chocolates,no_of_people,first_name,second_name,second_name_index)
+
 
